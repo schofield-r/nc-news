@@ -1,0 +1,178 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/topics": {
+    "description": "serves an array of all topics",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{ "slug": "football", "description": "Footie!" }]
+    }
+  },
+  "POST /api/topics": {
+    "description": "request body accepts an object in the form { slug : 'newTopic', description : 'this is a new topic' }",
+    "queries": [],
+    "exampleResponse": {
+      "status": 201,
+      "msg": "new topic created"
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": " https: //www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        },
+        {
+          "username": "lurker",
+          "name": "do_nothing",
+          "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+        }
+      ]
+    }
+  },
+  "POST /api/users": {
+    "description": "request body accepts new user object in the form {username:newUsername,name:newName,avatar_url:https://www.example-avatar-url.png}",
+    "queries": [],
+    "exampleResponse": {
+      "Status": 201,
+      "msg": "new user created"
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an object containing the user specified by username",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "butter_bridge",
+        "name": "jonny",
+        "avatar_url": " https: //www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+      }
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves up an object containing the article specified by article_id",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": 1542284514171,
+        "votes": 100
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "Request body accepts an object in the form {inc_votes: newVote} , newVote will indicate how much the votes property in the database should be updated by",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": 1542284514171,
+        "votes": 101
+      }
+    }
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "deletes given article by article_id",
+    "queries": [],
+    "exampleResponse": {
+      "status": 204
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "Request body accepts an object with the properties 'username' and 'body' ",
+    "queries": [],
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 2,
+        "author": "butter_bridge",
+        "article_id": 1,
+        "votes": 0,
+        "created_at": 1511354163389,
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+      }
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of all comments associated with article_id specified",
+    "queries": ["sort_by", "order"],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 3,
+          "body": "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
+          "author": "icellusedkars",
+          " votes": 16,
+          " created_at": 1101386163389
+        },
+        {
+          "comment_id": 4,
+          "body": "I am 100% sure that we're not completely sure.",
+          "author": "butter_bridge",
+          "votes": 1,
+          "created_at": 1069850163389
+        }
+      ]
+    }
+  },
+  "GET /api/articles": {
+    "description": "serves an array of all articles",
+    "queries": ["author", "topic", "sort_by", "order"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341
+        }
+      ]
+    }
+  },
+  "POST /api/articles": {
+    "description": "Request body accepts object with the keys 'title', 'topic', 'author',' body' and returns the new article",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "title":"Living in the shadow of a great man",
+        "author":"butter_bridge",
+        "article_id":1,
+        "created_at":1069850163389,
+        "votes":0,
+        "body":"Text from the article.."
+      }
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "Request body accepts an object in the form { inc_votes: newVote}, newVote will indicate how much the votes property in the database should be updated by (this must be a number and can contain negative numbers)",
+    "queries": [],
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 2,
+        "author": "butter_bridge",
+        "article_id": 1,
+        "votes": 1,
+        "created_at": 1511354163389,
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes given comment by comment_id",
+    "queries": [],
+    "exampleResponse": {
+      "status": 204
+    }
+  }
+}
