@@ -5,13 +5,23 @@ exports.fetchArticles = query => {
   const author = query.author;
   const topic = query.topic;
   return connection
-    .select("*")
+    .select(
+      "articles.author",
+      "title",
+      "articles.article_id",
+      "topic",
+      "articles.created_at",
+      "articles.votes","articles.body"
+    )
     .from("articles")
-    .modify(query => {
-      if (author) query.where({ author });
-      else if (topic) query.where({ topic });
-    })
+    .count({ comment_count: "comment_id" })
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .groupBy("articles.article_id")
     .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .modify(query => {
+      if (author) query.where("articles.author","=",author);
+      else if (topic) query.where("articles.topic","=",topic);
+    })
     .returning("*")
     .then(articles => {
       if (!articles.length) {

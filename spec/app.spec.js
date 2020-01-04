@@ -402,6 +402,7 @@ describe("/api", () => {
               title: "Moustache",
               body: "Have you seen the size of that thing?",
               votes: 0,
+              comment_count: "0",
               topic: "mitch",
               author: "butter_bridge",
               created_at: "1974-11-26T12:21:54.171Z"
@@ -411,6 +412,7 @@ describe("/api", () => {
               title: "They're not exactly dogs, are they?",
               body: "Well? Think about it.",
               votes: 0,
+              comment_count: "2",
               topic: "mitch",
               author: "butter_bridge",
               created_at: "1986-11-23T12:21:54.171Z"
@@ -420,6 +422,7 @@ describe("/api", () => {
               title: "Living in the shadow of a great man",
               body: "I find this existence challenging",
               votes: 100,
+              comment_count: "13",
               topic: "mitch",
               author: "butter_bridge",
               created_at: "2018-11-15T12:21:54.171Z"
@@ -438,6 +441,7 @@ describe("/api", () => {
               article_id: 5,
               title: "UNCOVERED: catspiracy to bring down democracy",
               body: "Bastet walks amongst us, and the cats are taking arms!",
+              comment_count: "2",
               votes: 0,
               topic: "cats",
               author: "rogersop",
