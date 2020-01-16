@@ -4,6 +4,10 @@ const { checkRowExists } = require("./utils");
 exports.fetchArticles = query => {
   const author = query.author;
   const topic = query.topic;
+  let limit = query.limit;
+  let p = query.p;
+  if (!p) p = 1;
+  if (!limit) limit = 10;
   return connection
     .select(
       "articles.author",
@@ -11,17 +15,21 @@ exports.fetchArticles = query => {
       "articles.article_id",
       "topic",
       "articles.created_at",
-      "articles.votes","articles.body"
+      "articles.votes",
+      "articles.body"
     )
     .from("articles")
     .count({ comment_count: "comment_id" })
     .leftJoin("comments", "articles.article_id", "comments.article_id")
     .groupBy("articles.article_id")
     .orderBy(query.sort_by || "created_at", query.order || "desc")
+
     .modify(query => {
-      if (author) query.where("articles.author","=",author);
-      else if (topic) query.where("articles.topic","=",topic);
+      if (author) query.where("articles.author", "=", author);
+      else if (topic) query.where("articles.topic", "=", topic);
     })
+    .limit(limit)
+    .offset((p - 1) * limit)
     .returning("*")
     .then(articles => {
       if (!articles.length) {
@@ -35,7 +43,22 @@ exports.fetchArticles = query => {
       }
     });
 };
+exports.totalCount = (tableName, query) => {
+  const author = query.author;
+  const topic = query.topic;
+  return connection
+    .select("*")
+    .from(tableName)
+    .modify(query => {
+      if (author) query.where("articles.author", "=", author);
+      else if (topic) query.where("articles.topic", "=", topic);
+    })
+    .then(articles => {
 
+        return articles.length;
+      })
+   
+};
 exports.fetchArticleById = article_id => {
   return connection
     .select("articles.*")
@@ -75,11 +98,17 @@ exports.postComment = (article_id, comment) => {
     .returning("*");
 };
 exports.fetchComments = (article_id, query) => {
+  let limit = query.limit;
+  let p = query.p;
+  if (!p) p = 1;
+  if (!limit) limit = 10;
   return connection
     .select("*")
     .from("comments")
     .where("article_id", article_id)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .limit(limit)
+    .offset((p - 1) * limit)
     .returning("*")
     .then(comments => {
       if (!comments.length) {

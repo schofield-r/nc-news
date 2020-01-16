@@ -346,4 +346,3 @@ describe("formatComments", () => {
     expect(input).to.eql(copyInput);
   });
 });
-

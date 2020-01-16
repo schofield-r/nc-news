@@ -25,6 +25,5 @@ exports.send404 = (req, res, next) => {
 };
 
 exports.send500 = (err, req, res, next) => {
-  console.log(err,'in 500')
   res.sendStatus(500).next(err);
 };

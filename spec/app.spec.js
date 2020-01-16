@@ -178,7 +178,6 @@ describe("/api", () => {
         .expect(200)
 
         .then(res => {
-          //console.log(res.body);
           expect(res.body.article).to.be.an("object");
           expect(res.body.article).to.contain.keys(
             "article_id",
@@ -328,9 +327,7 @@ describe("/api", () => {
         .get("/api/articles/1/comments")
         .expect(200)
         .then(res => {
-          // console.log(res.body)
           expect(res.body.comments).to.be.an("array");
-          expect(res.body.comments).to.have.lengthOf(13);
           expect(res.body.comments[0]).to.contain.keys(
             "comment_id",
             "votes",
@@ -387,6 +384,23 @@ describe("/api", () => {
           .expect(405);
       });
       return Promise.all(methodPromise);
+    });
+    it("responds with 200 and the first page with the default limit of comments on the page", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.have.length(10);
+        });
+    });
+    it("responds with 200 and the specified page with the specified limit of comments on the page ", () => {
+      return request(app)
+        .get("/api/articles/1/comments?limit=5&p=2")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.be.an('array')
+          expect(res.body.total_count).to.equal(18)
+        });
     });
   });
   describe("GET /articles", () => {
@@ -488,6 +502,75 @@ describe("/api", () => {
           .expect(405);
       });
       return Promise.all(methodPromise);
+    });
+    it("responds with 200 and the first page with the default limit of articles on the page", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.have.length(10);
+        });
+    });
+    it("responds with 200 and the specified page with the specified limit of articles on the page ", () => {
+      return request(app)
+        .get("/api/articles?limit=5&p=2")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.eql([
+            {
+              author: "icellusedkars",
+              title: "A",
+              article_id: 6,
+              topic: "mitch",
+              created_at: "1998-11-20T12:21:54.171Z",
+              votes: 0,
+              body: "Delicious tin of cat food",
+              comment_count: "1"
+            },
+            {
+              author: "icellusedkars",
+              title: "Z",
+              article_id: 7,
+              topic: "mitch",
+              created_at: "1994-11-21T12:21:54.171Z",
+              votes: 0,
+              body: "I was hungry.",
+              comment_count: "0"
+            },
+            {
+              author: "icellusedkars",
+              title: "Does Mitch predate civilisation?",
+              article_id: 8,
+              topic: "mitch",
+              created_at: "1990-11-22T12:21:54.171Z",
+              votes: 0,
+              body:
+                "Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!",
+              comment_count: "0"
+            },
+            {
+              author: "butter_bridge",
+              title: "They're not exactly dogs, are they?",
+              article_id: 9,
+              topic: "mitch",
+              created_at: "1986-11-23T12:21:54.171Z",
+              votes: 0,
+              body: "Well? Think about it.",
+              comment_count: "2"
+            },
+            {
+              author: "rogersop",
+              title: "Seven inspirational thought leaders from Manchester UK",
+              article_id: 10,
+              topic: "mitch",
+              created_at: "1982-11-24T12:21:54.171Z",
+              votes: 0,
+              body: "Who are we kidding, there is only one, and it's Mitch!",
+              comment_count: "0"
+            }
+          ]);
+          expect(res.body.total_count).to.equal(12)
+        });
     });
   });
   describe("POST /articles", () => {

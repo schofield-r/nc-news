@@ -5,14 +5,15 @@ const {
   postComment,
   fetchComments,
   createArticle,
-  deleteArticle
+  deleteArticle,
+  totalCount
 } = require("../models/articles");
 
 exports.sendArticles = (req, res, next) => {
   const query = req.query;
-  fetchArticles(query)
-    .then(articles => {
-      res.status(200).send({ articles });
+  Promise.all([fetchArticles(query), totalCount("articles", query)])
+    .then(results => {
+      res.status(200).send({ articles: results[0], total_count: results[1] });
     })
     .catch(next);
 };
@@ -33,7 +34,6 @@ exports.patchArticleById = (req, res, next) => {
     })
     .catch(next);
 };
-
 exports.postCommentOnArticle = (req, res, next) => {
   const { article_id } = req.params;
   const comment = req.body;
@@ -46,9 +46,9 @@ exports.postCommentOnArticle = (req, res, next) => {
 exports.getComments = (req, res, next) => {
   const { article_id } = req.params;
   const query = req.query;
-  fetchComments(article_id, query)
-    .then(comments => {
-      res.status(200).send({ comments });
+  Promise.all([fetchComments(article_id, query), totalCount("comments", query)])
+    .then(results => {
+      res.status(200).send({ comments: results[0], total_count: results[1] });
     })
     .catch(next);
 };
@@ -61,7 +61,7 @@ exports.postArticle = (req, res, next) => {
     .catch(next);
 };
 exports.deleteArticleById = (req, res, next) => {
-  const article_id = req.params.article_id
+  const article_id = req.params.article_id;
   deleteArticle(article_id)
     .then(() => {
       res.status(204).send({ msg: `article ${article_id} deleted` });

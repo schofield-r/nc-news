@@ -1,6 +1,6 @@
 const formatDates = list => {
-  let timestamps = []
-  list.forEach(x => timestamps.push({...x}))
+  let timestamps = [];
+  list.forEach(x => timestamps.push({ ...x }));
   for (let i = 0; i < timestamps.length; i++)
     timestamps[i].created_at = new Date(timestamps[i].created_at);
   return timestamps;
@@ -15,7 +15,7 @@ const makeRefObj = list => {
 };
 
 const formatComments = (comments, articleRef) => {
-  const formatCommentsArr = []
+  const formatCommentsArr = [];
   for (let i = 0; i < comments.length; i++) {
     const formatComment = {};
     formatComment.author = comments[i].created_by;
@@ -23,7 +23,7 @@ const formatComments = (comments, articleRef) => {
     formatComment.votes = comments[i].votes;
     formatComment.created_at = comments[i].created_at;
     formatComment.body = comments[i].body;
-    formatCommentsArr.push(formatComment)
+    formatCommentsArr.push(formatComment);
   }
   return formatDates(formatCommentsArr);
 };
